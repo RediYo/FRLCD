@@ -1,0 +1,5 @@
+id,identity_code,inter_time,inter_flag,inter_mobile_identity_code,major_minor,rssi,distance,place,upload_time
+92371,fedc20de,2023/02/21 13:24:40,1,f69de6fcbletest0,,-55.5,1,,1676957137000
+92373,fedc20de,2023/02/21 13:24:41,1,f69de6fcbletest0,,-54.0,1,,1676957137000
+92383,fedc20de,2023/02/21 13:24:45,1,f69de6fcbletest0,,-59.0,1,,1676957137000
+94179,fedc20de,2023/02/21 13:30:10,1,f69de6fcbletest0,,-69.5,2,,1676957424000
