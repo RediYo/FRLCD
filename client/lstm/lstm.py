@@ -56,6 +56,7 @@ for data_path in data_path_strs:
             header = next(csv_reader)  # 读取第一行作为表头
             temp = 0
             tempData = []
+            timeLong = 0
             for row in csv_reader:  # 将csv 文件中的数据保存到data中
                 # 转换成时间数组
                 timeArray = time.strptime(row[2], "%Y/%m/%d %H:%M:%S")
@@ -66,9 +67,12 @@ for data_path in data_path_strs:
                 else:
                     interval = timestamp - temp
                 temp = timestamp
+                timeLong += interval
                 t = (interval, float(row[6]))  # 选择某几列加入到data数组中
                 tempData.append(t)
-            if csv_reader.line_num < 20:  # 如果一次训练数据太少则不参与训练，因为很可能缺失了数据，蓝牙信号未接收到
+            # 1.如果一次训练数据太少则不参与训练，因为很可能缺失了数据，蓝牙信号未接收到
+            # 2.如果相隔时间太短则也表示数据缺失严重不参与训练
+            if csv_reader.line_num < 10 or timeLong < 400:
                 continue
             # 利用tag文件数据生成标签，如果设置new_tag则将距离区间范围扩大例如 （0,2.5)(2.5,5.5)(5.5,10)
             strs = (file.name.replace(".csv", "")).split("_")
@@ -191,7 +195,7 @@ def test(model, test_data):
             pred_y = predicted.numpy()
             label_y = np.array(tags)
             diff = abs(np.array(pred_y - label_y))
-            if np.max(diff) <= 0.05:  # 输出概率差值全部小于0.05则认为是预测正确
+            if np.max(diff) <= 0.1:  # 输出概率差值全部小于0.05则认为是预测正确
                 correct += 1
             # if pred_y.all == label_y.all:
             #     correct += 1
