@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/close_contact_prediction.iml" filepath="$PROJECT_DIR$/.idea/close_contact_prediction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/FRLCD.iml" filepath="$PROJECT_DIR$/.idea/FRLCD.iml" />
     </modules>
   </component>
 </project>

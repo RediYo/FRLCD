@@ -10,7 +10,7 @@ sorted_path = "sorted_data"
 rp = Path(raw_path)
 sp = Path(sorted_path)
 # 直接遍历出文件绝对路径
-for file_name in rp.rglob('*.csv'):
+for file_name in rp.glob('*.csv'):
     # csv文件对交互时间进行排序
     # 1.读取文件数据
     df = pd.read_csv(file_name)
