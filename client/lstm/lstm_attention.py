@@ -39,7 +39,10 @@ dataset_train_wifi_B_not_full = "../dataset/开启WIFI组/大厅/not_full_data"
 data_path_train = [dataset_train_not_wifi_A, dataset_train_not_wifi_B, dataset_train_wifi_A, dataset_train_wifi_B]
 data_path_test = [dataset_train_not_wifi_A_not_full, dataset_train_not_wifi_B_not_full, dataset_train_wifi_A_not_full,
                   dataset_train_wifi_B_not_full]
-data_path_train = data_path_test
+
+# temp = data_path_train
+# data_path_train = data_path_test
+# data_path_test = temp
 
 
 # 遍历目录下所有的 csv 文件
@@ -118,30 +121,60 @@ OUTPUT_DIM = 3
 HIDDEN_DIM = 6
 
 
-class LSTMTagger(nn.Module):
+class LSTMTagger_Attention(nn.Module):
 
     def __init__(self, input_dim, hidden_dim, tagset_size):
-        super(LSTMTagger, self).__init__()
+        super(LSTMTagger_Attention, self).__init__()
         self.hidden_dim = hidden_dim
 
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(input_dim, hidden_dim)
+        # 初始时间步和最终时间步的隐藏状态作为全连接层输入
+        self.w_omega = nn.Parameter(torch.Tensor(HIDDEN_DIM, HIDDEN_DIM * 2))
+        self.u_omega = nn.Parameter(torch.Tensor(HIDDEN_DIM * 2, 1))
+
+        nn.init.uniform_(self.w_omega, -0.1, 0.1)
+        nn.init.uniform_(self.u_omega, -0.1, 0.1)
 
         # The linear layer that maps from hidden state space to tag space
         self.hidden2tag = nn.Linear(hidden_dim, tagset_size)
 
+    def attention_net(self, lstm_output, h_t):
+        # lstm_output.shape=(seq_len, hidden_size)
+        # lstm_output.shape=(seq_len,6)  h_t(1,6)
+        # Attention过程
+        u = torch.tanh(torch.mm(lstm_output, self.w_omega))
+        # u.shape=(seq_len, HIDDEN_DIM * 2)
+        att = torch.mm(u, self.u_omega)
+        # att.shape=(seq_len, 1)
+        print(f"att.shape {att.shape}")
+        att_score = F.softmax(att, dim=1)
+        # att_score.shape=(seq_len, 1)
+        scored = lstm_output * att_score
+        # scored.shape=(seq_len, HIDDEN_DIM)
+        print(f"scored.shape {scored.shape}")
+        # Attention过程结束
+
+        attn_out = torch.sum(scored, dim=0)  # 加权求和
+        # feat.shape=(HIDDEN_DIM)
+        print(f"feat.shape {attn_out.shape}")
+        return attn_out
+
     def forward(self, input):
-        lstm_out, _ = self.lstm(torch.tensor(input, dtype=torch.float32))
-        print(f"lstm_out {lstm_out[-1]}")
-        tag_space = self.hidden2tag(lstm_out[-1])
+        lstm_output, (h_t, c_t) = self.lstm(torch.tensor(input, dtype=torch.float32))
+        print(f"lstm_out{lstm_output}")
+        print(f"h_t {h_t}")
+        # 对lstm_output做attention
+        attn_out = self.attention_net(lstm_output, h_t)
+        tag_space = self.hidden2tag(attn_out)
         print(f"tag_space {tag_space}")
-        # tag_scores = F.softmax(tag_space, dim=0)
-        # print(f"tag_scores {tag_scores}")
-        return tag_space
+        tag_scores = F.softmax(tag_space, dim=0)
+        print(f"tag_scores {tag_scores}")
+        return tag_scores
 
 
-model = LSTMTagger(INPUT_DIM, HIDDEN_DIM, OUTPUT_DIM)
+model = LSTMTagger_Attention(INPUT_DIM, HIDDEN_DIM, OUTPUT_DIM)
 
 
 # See what the scores are before training
