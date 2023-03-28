@@ -8,6 +8,7 @@ import torch.optim as optim
 from pathlib import Path
 from torch.utils.tensorboard import SummaryWriter
 
+# ------------------------------------------------------
 # # 关闭WIFI组走廊
 # dataset_train_not_wifi_A = "../dataset/关闭WIFI组/走廊"
 # # 关闭WIFI组大厅
@@ -17,29 +18,41 @@ from torch.utils.tensorboard import SummaryWriter
 # # 开启WiFi组大厅
 # dataset_train_wifi_B = "../dataset/开启WIFI组/大厅"
 
-
 # 关闭WIFI组走廊
-dataset_train_not_wifi_A = "../dataset/关闭WIFI组/走廊/is_full_data"
-# 关闭WIFI组大厅
-dataset_train_not_wifi_B = "../dataset/关闭WIFI组/大厅/is_full_data"
-# 开启WiFi组走廊
-dataset_train_wifi_A = "../dataset/开启WIFI组/走廊/is_full_data"
-# 开启WiFi组大厅
-dataset_train_wifi_B = "../dataset/开启WIFI组/大厅/is_full_data"
+# dataset_train_not_wifi_A = "../dataset/关闭WIFI组/走廊/is_full_data"
+# # 关闭WIFI组大厅
+# dataset_train_not_wifi_B = "../dataset/关闭WIFI组/大厅/is_full_data"
+# # 开启WiFi组走廊
+# dataset_train_wifi_A = "../dataset/开启WIFI组/走廊/is_full_data"
+# # 开启WiFi组大厅
+# dataset_train_wifi_B = "../dataset/开启WIFI组/大厅/is_full_data"
 
-# 关闭WIFI组走廊
-dataset_train_not_wifi_A_not_full = "../dataset/关闭WIFI组/走廊/not_full_data"
-# 关闭WIFI组大厅
-dataset_train_not_wifi_B_not_full = "../dataset/关闭WIFI组/大厅/not_full_data"
-# 开启WiFi组走廊
-dataset_train_wifi_A_not_full = "../dataset/开启WIFI组/走廊/not_full_data"
-# 开启WiFi组大厅
-dataset_train_wifi_B_not_full = "../dataset/开启WIFI组/大厅/not_full_data"
 
-data_path_train = [dataset_train_not_wifi_A, dataset_train_not_wifi_B, dataset_train_wifi_A, dataset_train_wifi_B]
-data_path_test = [dataset_train_not_wifi_A_not_full, dataset_train_not_wifi_B_not_full, dataset_train_wifi_A_not_full,
-                  dataset_train_wifi_B_not_full]
-data_path_train = data_path_test
+# # 关闭WIFI组走廊
+# dataset_train_not_wifi_A_not_full = "../dataset/关闭WIFI组/走廊/not_full_data"
+# # 关闭WIFI组大厅
+# dataset_train_not_wifi_B_not_full = "../dataset/关闭WIFI组/大厅/not_full_data"
+# # 开启WiFi组走廊
+# dataset_train_wifi_A_not_full = "../dataset/开启WIFI组/走廊/not_full_data"
+# # 开启WiFi组大厅
+# dataset_train_wifi_B_not_full = "../dataset/开启WIFI组/大厅/not_full_data"
+
+# data_path_train = [dataset_train_not_wifi_A, dataset_train_not_wifi_B, dataset_train_wifi_A, dataset_train_wifi_B]
+# data_path_test = [dataset_train_not_wifi_A, dataset_train_not_wifi_B, dataset_train_wifi_A, dataset_train_wifi_B]
+# --------------------------------------
+# dataset_2_train_C_1 = "../dataset_2/活动室/1"
+# dataset_2_train_C_2 = "../dataset_2/活动室/2"
+# dataset_2_train_C_3 = "../dataset_2/活动室/3"
+#
+# dataset_2_train_B_1 = "../dataset_2/走廊/1"
+# dataset_2_train_B_2 = "../dataset_2/走廊/2"
+# dataset_2_train_B_3 = "../dataset_2/走廊/3"
+
+
+data_path_train = ["./dataset/2/is_full", "./dataset/2/not_full"]
+data_path_test = ["./dataset/2/is_full", "./dataset/2/not_full"]
+
+# data_path_train = data_path_test
 
 
 # 遍历目录下所有的 csv 文件
@@ -84,6 +97,7 @@ def generate_data(data_path_strs):
                 #     filename = strs[1] + "_" + strs[0]
                 #     tag_file = Path(data_path + "/tag/" + filename + "_tag.csv")
                 tag_file = Path(str(Path(data_path).parent) + "/tag/" + file.name)
+                # tag_file = Path(data_path + "/tag/" + file.name)
                 with open(tag_file) as tag_file_in:
                     csv_tag_reader = csv.reader(tag_file_in)  # 使用csv.reader读取csv
                     tag = next(csv_tag_reader)  # 读取第一行标签
@@ -101,8 +115,8 @@ def generate_data(data_path_strs):
                 print(f"sum(new_tag):{sum(new_tag)}")
                 dataTuple = (
                     tempData,
-                    # [new_tag[0] / sum(new_tag), new_tag[1] / sum(new_tag), new_tag[2] / sum(new_tag)])
-                    [new_tag[0], new_tag[1], new_tag[2]])
+                    [new_tag[0] / sum(new_tag), new_tag[1] / sum(new_tag), new_tag[2] / sum(new_tag)])
+                # [new_tag[0], new_tag[1], new_tag[2]])
                 data.append(dataTuple)
     print(data)
     return data
@@ -188,7 +202,7 @@ def test(model, test_data):
     """Validate the network on the entire test set."""
     loss_function = nn.MSELoss()
     correct, total, loss = 0, 0, 0.0
-    writer = SummaryWriter('./data_log/test')
+    # writer = SummaryWriter('./data_log/test')
     with torch.no_grad():
         for data_items in test_data:
             features = data_items[0]
@@ -200,7 +214,7 @@ def test(model, test_data):
             pred_y = predicted.numpy()
             label_y = np.array(tags)
             diff = abs(np.array(pred_y - label_y))
-            if np.max(diff) <= 1:  # 输出概率差值全部小于1分钟则认为是预测正确
+            if np.max(diff) <= 0.1:  # 输出概率差值全部小于1分钟则认为是预测正确
                 correct += 1
             # if pred_y.all == label_y.all:
             #     correct += 1
