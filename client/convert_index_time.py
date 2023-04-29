@@ -5,23 +5,26 @@ import csv
 import openpyxl
 from collections import Counter
 
-# 利用submit数据计算索引及所处时间
-
+# 第2、3次数据采集
+# 2.利用submit数据计算索引及所处时间
 
 path = r"D:\Pycharm projects\FRLCD\client"
 os.chdir(path)  # 修改全局工作路径
 
-identityCodes = ["fedc20de", "dc32f1d2", "75909e89", "0926bde8"]
-input_path = r"dataset_2\submit\走廊"
-input_path_2 = r"dataset_2\走廊\3"
-output_path_2 = r"dataset_2\走廊\3\tag"
+# identityCodes = ["0926bde8", "f69de6fc", "164732b9"]  # 钟
+identityCodes = ["dc32f1d2", "defe41cc", "e6208a42"]  # 肖
+input_path = r"dataset_3\肖组\submit\活动室"
+input_path_2 = r"dataset_3\肖组\活动室\1"
+output_path_tag = r"dataset_3\肖组\活动室\1\tag"
 in_p = Path(input_path)
 in_p_2 = Path(input_path_2)
-index_time = {"fedc20de": [],
-              "dc32f1d2": [],
-              "75909e89": [],
-              "0926bde8": [], }  # []内为每一分钟的索引值
-for file in in_p.glob('3.csv'):
+# index_time = {"0926bde8": [],
+#               "f69de6fc": [],
+#               "164732b9": []}  # []内为每一分钟的索引值
+index_time = {"dc32f1d2": [],
+              "defe41cc": [],
+              "e6208a42": []}  # []内为每一分钟的索引值
+for file in in_p.glob('1.csv'):  # submit 文件
     start_timestamp = 0  # 交互开始时间
     for identityCode in identityCodes:
         with open(file) as csvfile:
@@ -50,12 +53,15 @@ for file in in_p.glob('3.csv'):
             csvfile.close()
     print(f"index_time:{index_time}")
     # 找出时间范围区间，需要根据不同的距离区间索引时间文件进行操作
+    # filenames = [identityCodes[0] + '_' + identityCodes[1],
+    #              identityCodes[0] + '_' + identityCodes[2],
+    #              identityCodes[0] + '_' + identityCodes[3],
+    #              identityCodes[1] + '_' + identityCodes[2],
+    #              identityCodes[1] + '_' + identityCodes[3],
+    #              identityCodes[2] + '_' + identityCodes[3]]
     filenames = [identityCodes[0] + '_' + identityCodes[1],
                  identityCodes[0] + '_' + identityCodes[2],
-                 identityCodes[0] + '_' + identityCodes[3],
-                 identityCodes[1] + '_' + identityCodes[2],
-                 identityCodes[1] + '_' + identityCodes[3],
-                 identityCodes[2] + '_' + identityCodes[3]]
+                 identityCodes[1] + '_' + identityCodes[2]]
     for filename in filenames:
         for file_2 in in_p_2.glob('*.csv'):
             strs = filename.split('_')
@@ -65,7 +71,7 @@ for file in in_p.glob('3.csv'):
                 dis_list = [abs(x - y) for x, y in zip(index_time[strs[0]], index_time[strs[1]])]
                 # print(f"dis_list:{dis_list}")
                 strs = file_2.name.split("_")
-                start_time = float(strs[0])
+                start_time = float(strs[0])  # 根据文件
                 end_time = float(strs[1])
                 start_min = round((start_time - start_timestamp) / 60) + 1
                 if start_min < 0:
@@ -78,7 +84,7 @@ for file in in_p.glob('3.csv'):
                 result = dict(Counter(dis_list[int(start_min):int(end_min+1)]))  # 统计出现次数
 
                 # os.makedirs(os.path.dirname(filename+".csv"), exist_ok=True)
-                with open(output_path_2+"/"+file_2.name, 'w', encoding='GBK') as output:  # 在全局工作路径下
+                with open(output_path_tag+"/"+file_2.name, 'w', encoding='GBK') as output:  # 在全局工作路径下
                     writer = csv.writer(output)  # 用writer函数读入文件指针
                     t = []
                     print(result.items())

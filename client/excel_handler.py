@@ -1,5 +1,7 @@
 import os
 import openpyxl
+
+# 第一次数据采集
 # 2.索引值处理，距离差值
 path = r"D:\Pycharm projects\close_contact_prediction\client\dataset"
 os.chdir(path)  # 修改工作路径

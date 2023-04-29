@@ -1,26 +1,19 @@
 # Author: Robert Guthrie
-import ast
-import re
 import collections
 import warnings
 from collections import OrderedDict
 
+import flwr as fl
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-import flwr as fl
 from gym import spaces
-from numpy import array
-from numpy import float32
-from torch import tensor
-from torch.utils.tensorboard import SummaryWriter
 
-# DEFAULT_ENV_NAME = "PongNoFrameskip-v4"
-DEFAULT_ENV_NAME = "RoboschoolPong-v1"
+# LSTM任务为Pytorch教程中单词词性预测
+
 MEAN_REWARD_BOUND = 15
-
 BATCH_SIZE = 32
 REPLAY_SIZE = 2000
 LEARNING_RATE = 1e-4

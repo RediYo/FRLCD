@@ -1,0 +1,8 @@
+id,identity_code,inter_time,inter_flag,inter_mobile_identity_code,major_minor,rssi,distance,place,upload_time
+78672,defe41cc,2023/02/21 12:20:58,1,f69de6fcbletest0,,-86.0,5,,1676953262000
+78951,defe41cc,2023/02/21 12:21:37,1,f69de6fcbletest0,,-86.0,5,,1676953302000
+79906,defe41cc,2023/02/21 12:25:21,1,f69de6fcbletest0,,-86.0,5,,1676953525000
+80005,defe41cc,2023/02/21 12:26:00,1,f69de6fcbletest0,,-89.0,5,,1676953565000
+80214,defe41cc,2023/02/21 12:27:02,1,f69de6fcbletest0,,-85.0,5,,1676953630000
+80220,defe41cc,2023/02/21 12:27:06,1,f69de6fcbletest0,,-78.0,3,,1676953630000
+80699,defe41cc,2023/02/21 12:28:47,1,f69de6fcbletest0,,-66.0,2,,1676953735000

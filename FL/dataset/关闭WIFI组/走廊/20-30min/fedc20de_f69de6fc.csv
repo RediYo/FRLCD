@@ -1,0 +1,7 @@
+id,identity_code,inter_time,inter_flag,inter_mobile_identity_code,major_minor,rssi,distance,place,upload_time
+81168,fedc20de,2023/02/21 12:30:27,1,f69de6fcbletest0,,-60.5,1,,1676953874000
+81171,fedc20de,2023/02/21 12:30:28,1,f69de6fcbletest0,,-63.2,1,,1676953874000
+81176,fedc20de,2023/02/21 12:30:29,1,f69de6fcbletest0,,-71.0,2,,1676953874000
+81180,fedc20de,2023/02/21 12:30:30,1,f69de6fcbletest0,,-75.0,2,,1676953874000
+81184,fedc20de,2023/02/21 12:30:31,1,f69de6fcbletest0,,-72.33333333333333,2,,1676953874000
+81187,fedc20de,2023/02/21 12:30:32,1,f69de6fcbletest0,,-67.0,2,,1676953874000

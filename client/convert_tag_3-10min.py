@@ -4,6 +4,7 @@ import csv
 import openpyxl
 from collections import Counter
 
+# 第一次数据采集
 # 3.距离区间索引时间.xlsx数据提取训练数据的标签，生成csv文件，距离0-9m，从0开始
 
 # 走廊 2023-02-21 12:10:00, 12:40:00

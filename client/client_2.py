@@ -1,29 +1,21 @@
 # Author: Robert Guthrie
-import ast
-import csv
-import operator
-import time
-import re
 import collections
+import csv
+import time
 import warnings
 from collections import OrderedDict
 
+import flwr as fl
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-import flwr as fl
 from gym import spaces
-from numpy import array
-from numpy import float32
-from torch import tensor
-from torch.utils.tensorboard import SummaryWriter
 
-# DEFAULT_ENV_NAME = "PongNoFrameskip-v4"
-DEFAULT_ENV_NAME = "RoboschoolPong-v1"
+# LSTM任务没有添加Attention
+
 MEAN_REWARD_BOUND = 15
-
 BATCH_SIZE = 32
 REPLAY_SIZE = 2000
 LEARNING_RATE = 1e-4
@@ -52,8 +44,8 @@ class DQN(nn.Module):
     def forward(self, x):
         # x = self.flatten(x)
         x = x.to(torch.float32)
-        logits = self.linear_relu_stack(x)  # 在深度学习中，logits就是最终的全连接层的输出，而非其本意
-        return logits
+        output = self.linear_relu_stack(x)
+        return output
 
 
 # 经验池
@@ -81,14 +73,14 @@ class Agent:
         self.pre_state = (0, 0, 0, 0, 0)
         self.state = (0, 0, 0, 0, 0)
         self.exp_buffer = exp_buffer
-        self.pre_action = 5
-        self.action = 5
-        self.pre_loss = 0
-        self.loss = 0
-        self.pre_reward = 0
-        self.reward = 0
-        self.learn_step_counter = 0  # for target updating
-        self.action_space = spaces.Discrete(10, start=1)  # 动作空间{0，1，2，3，4，5，6，7，8，9，10}
+        self.pre_action = 5  # 前一个动作
+        self.action = 5  # 当前动作
+        self.pre_loss = 0  # 前一次损失
+        self.loss = 0  # 当前损失
+        self.pre_reward = 0  # 前一次奖励
+        self.reward = 0  # 当前奖励
+        self.learn_step_counter = 0  # 目标网络更新循环等待次数
+        self.action_space = spaces.Discrete(10, start=0)  # 动作空间{0，1，2，3，4，5，6，7，8，9}
         self._reset()
 
     def _reset(self):

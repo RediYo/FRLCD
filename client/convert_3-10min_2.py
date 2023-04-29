@@ -2,8 +2,9 @@ from pathlib import Path
 import csv
 import time
 
-# A.将排序好的数据转换成LSTM模型的的训练数据（3-10min）
-sorted_path = "sorted_data/走廊/3"
+# 第2、3次数据采集
+# 1.将排序好的数据转换成LSTM模型的的训练数据（3-10min）
+sorted_path = "sorted_data/钟组/走廊/2"
 sp = Path(sorted_path)
 # 直接遍历出文件绝对路径
 for file in sp.glob('*.csv'):
@@ -32,7 +33,7 @@ for file in sp.glob('*.csv'):
             # 小于3分钟即180秒，则为可用数据, 同时一次数据需要小于10min大于3min
             if (timestamp - temp) < 180 and (timestamp - first_timestamp) <= 600:
                 data_one.append(row)
-            else:  # 否则断开预测
+            else:  # 否则断开，时间间隔超出3分钟则分为另一组数据
                 if (temp - first_timestamp) >= 180:  # 一次数据需要小于10min大于3min
                     data.append(data_one)
                 data_one = []
@@ -50,7 +51,7 @@ for file in sp.glob('*.csv'):
                 timestamp_first = time.mktime(timeArray)
                 timeArray = time.strptime(data_one[len(data_one)-1][2], "%Y/%m/%d %H:%M:%S")
                 timestamp_last = time.mktime(timeArray)
-                with open("./dataset_2/" + str(timestamp_first) + "_" + str(timestamp_last) + "_" + file.name, 'w', newline='', encoding='GBK') as output:
+                with open("./dataset_3/" + str(timestamp_first) + "_" + str(timestamp_last) + "_" + file.name, 'w', newline='', encoding='GBK') as output:
                     writer = csv.writer(output)  # 用writer函数读入文件指针
                     writer.writerow(header)
                     for one in data_one:

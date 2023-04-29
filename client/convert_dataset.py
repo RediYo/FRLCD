@@ -1,6 +1,8 @@
 from pathlib import Path
 import csv
 import time
+
+# 第一次数据采集
 # 1.将排序好的数据转换成测试时间范围内的数据（0-30min）
 sorted_path = "sorted_data/有WiFi组"
 sp = Path(sorted_path)

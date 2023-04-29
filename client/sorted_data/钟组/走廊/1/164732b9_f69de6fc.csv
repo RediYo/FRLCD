@@ -1,0 +1,4 @@
+id,identity_code,inter_time,inter_flag,inter_mobile_identity_code,major_minor,rssi,distance,place,upload_time
+128991,164732b9,2023/04/27 20:51:48,1,f69de6fcbletest0,,-80.5,3,,1682599950000
+128993,164732b9,2023/04/27 20:51:49,1,f69de6fcbletest0,,-77.0,3,,1682599950000
+128995,164732b9,2023/04/27 20:51:50,1,f69de6fcbletest0,,-74.5,2,,1682599950000

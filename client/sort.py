@@ -5,8 +5,8 @@ import os
 from pathlib import Path
 import time
 
-raw_path = "raw_data"
-sorted_path = "sorted_data"
+raw_path = "raw_data/钟组/活动室/1"
+sorted_path = "sorted_data/钟组/活动室/1"
 rp = Path(raw_path)
 sp = Path(sorted_path)
 # 直接遍历出文件绝对路径

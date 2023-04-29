@@ -5,7 +5,7 @@ import csv
 import openpyxl
 from collections import Counter
 
-# 利用submit数据计算索引及所处时间
+# 利用submit数据计算索引及所处时间 已舍弃 具体看 convert_index_time 文件
 
 
 path = r"D:\Pycharm projects\FRLCD\client\dataset_2\submit"

@@ -3,8 +3,9 @@ import csv
 import time
 from shutil import copyfile
 
-# 筛选完整数据 数据接收时间间隔均小于1分钟
-data_path = "dataset_2/走廊/1"
+# 第2、3次数据采集
+# 3.筛选完整数据 数据接收时间间隔均小于1分钟
+data_path = "dataset_3/钟组/活动室/2"
 data_path_is_full = data_path+"/is_full_data"
 data_path_not_full = data_path+"/not_full_data"
 dp = Path(data_path)
@@ -27,7 +28,7 @@ for file in dp.glob('*.csv'):
         data = []
         data_one = [row_first]
         flag = True  # 完整数据标记
-        for row in csv_reader:  # 将csv 文件中的数据按照3-10min保存到data中，列索引从0开始
+        for row in csv_reader:  # 遍历
             # 转换成时间数组
             timeArray = time.strptime(row[2], "%Y/%m/%d %H:%M:%S")
             # 转换成时间戳
