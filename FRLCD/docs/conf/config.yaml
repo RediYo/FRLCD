@@ -1,0 +1,8 @@
+num_clients: 5
+num_rounds: 3
+num_epochs: 1
+batch_size: 64
+client_fraction: 1.0
+expected_maximum: 0.5
+learning_rate: 0.1
+save_path: "docs/results"
